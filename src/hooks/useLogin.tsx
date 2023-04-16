@@ -1,14 +1,30 @@
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from "@/config/firebase";
 import { useState } from "react";
-
+import { User } from "@/types";
 import { collection, getDocs, query, where } from "firebase/firestore";
 const provider = new GoogleAuthProvider();
 
 export const useLogin = () => {
-  const [user, setUser] = useState<any>();
+  const [user, setUser] = useState<User | null>(null);
   const [isPending, setIsPending] = useState<boolean>(false);
   const [registerStatus, setRegisterStatus] = useState<boolean>(false);
+
+  const addToLocalStorage = (details: any) => {
+    if (localStorage) {
+      const tuser = {
+        // id: false,
+        displayName: details.displayName,
+        email: details.email,
+        token: details.accessToken,
+      };
+      setUser(tuser);
+      localStorage.setItem("workoutbud_user", JSON.stringify(tuser));
+      console.log("added item to local storage");
+    } else {
+      // No support. Use a fallback such as browser cookies or store on the server.
+    }
+  };
 
   const login = async () => {
     setIsPending(true);
@@ -16,8 +32,7 @@ export const useLogin = () => {
       .then((result) => {
         const userDetails = result.user;
         console.log(userDetails);
-
-        setUser(userDetails);
+        addToLocalStorage(userDetails);
         //create a user profile
         setRegisterStatus(true);
         setIsPending(false);
@@ -30,5 +45,10 @@ export const useLogin = () => {
     setIsPending(false);
   };
 
-  return { login, user, isPending, registerStatus };
+  const logout = () => {
+    setUser(null);
+    localStorage.removeItem("workoutbud_user");
+  };
+
+  return { login, logout, user, isPending, registerStatus };
 };
