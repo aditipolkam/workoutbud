@@ -11,6 +11,9 @@ import {
   FormErrorMessage,
   Text,
 } from "@chakra-ui/react";
+import { db } from "@/config/firebase";
+import { USERCOLLECTION } from "@/config/dbVars";
+import { getDoc, doc, setDoc } from "firebase/firestore";
 import { useState } from "react";
 import { useLogin } from "@/hooks/useLogin";
 import { User } from "@/types";
@@ -29,6 +32,7 @@ const Signup = () => {
     event.preventDefault();
     console.log(nickname, gender, activities, timeSlots, description);
     if (nickname && gender && activities && timeSlots && description) {
+      if (!userDetails) return;
       setError("");
       const data = {
         nickname,
@@ -41,23 +45,30 @@ const Signup = () => {
           return value.trim();
         }),
       };
-      await fetch("/api/update-user", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      })
-        .then((res) => res.json())
-        .then((data) => {
-          console.log(data);
-          if (data.error) {
-            setError(data.error);
-          } else {
-            setError("");
-            window.location.href = "/";
-          }
-        });
+      const docRef = doc(db, USERCOLLECTION, userDetails.email);
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        console.log("Document data:", docSnap.data());
+      } else {
+        await setDoc(doc(db, USERCOLLECTION, userDetails.email), data);
+      }
+      // await fetch("/api/update-user", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify(data),
+      // })
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     console.log(data);
+      //     if (data.error) {
+      //       setError(data.error);
+      //     } else {
+      //       setError("");
+      //       window.location.href = "/";
+      //     }
+      //   });
     } else {
       setError("Please fill all the fields");
     }
