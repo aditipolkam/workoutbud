@@ -4,6 +4,7 @@ import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { useLogin } from "@/hooks/useLogin";
 import { useEffect, useState } from "react";
 import { User } from "@/types";
+import Link from "next/link";
 
 const Navbar = () => {
   const { login, user, logout } = useLogin();
@@ -19,7 +20,9 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-between flex-row mb-10">
-      <div className="font-bold text-2xl">workoutbud</div>
+      <Link href={"/"}>
+        <div className="font-bold text-2xl">workoutbud</div>
+      </Link>
       <div>
         {userDetails ? (
           <Menu>

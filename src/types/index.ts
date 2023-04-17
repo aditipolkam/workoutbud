@@ -5,4 +5,12 @@ interface User {
     token: string;
 }
 
-export type { User };
+interface UserProfile {
+    nickname: string;
+    gender: string;
+    description: string;
+    activities: string[];
+    timeSlots: string[];
+}
+
+export type { User, UserProfile };
