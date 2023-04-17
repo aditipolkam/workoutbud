@@ -19,12 +19,7 @@ const UserCard = ({ data }: { data: UserProfile }) => {
       variant="outline"
       width={600}
     >
-      <Image
-        objectFit="cover"
-        maxW={{ base: "100%", sm: "200px" }}
-        src="https://images.unsplash.com/photo-1511367461989-f85a21fda167?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1931&q=80"
-        alt="Profile"
-      />
+      <Image objectFit="cover" width={200} src={data.avatar} alt="Profile" />
 
       <Stack>
         <CardBody>
@@ -39,18 +34,17 @@ const UserCard = ({ data }: { data: UserProfile }) => {
               <>{activity} </>
             ))}
           </Text>
+          <Text py="2">Stays near: {data.address}</Text>
           <Text py="2">
             Free Time:{" "}
             {data.timeSlots.map((slot) => (
               <>{slot} </>
             ))}
           </Text>
-        </CardBody>
-        <CardFooter>
           <Button variant="solid" colorScheme="blue">
             View Profile
           </Button>
-        </CardFooter>
+        </CardBody>
       </Stack>
     </Card>
   );

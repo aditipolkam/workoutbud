@@ -26,18 +26,28 @@ const Signup = () => {
   const [gender, setGender] = useState<string | null>(null);
   const [activities, setActivities] = useState<string | null>(null);
   const [timeSlots, setTimeSlots] = useState<string | null>(null);
+  const [address, setAddress] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
-    console.log(nickname, gender, activities, timeSlots, description);
-    if (nickname && gender && activities && timeSlots && description) {
+
+    if (
+      nickname &&
+      gender &&
+      activities &&
+      timeSlots &&
+      description &&
+      address
+    ) {
       if (!userDetails) return;
       setError("");
       const data = {
+        avatar: userDetails.avatar,
         nickname,
         description,
         gender,
+        address,
         activities: activities.split(",").map(function (value: string) {
           return value.trim();
         }),
@@ -83,7 +93,7 @@ const Signup = () => {
   }, [user]);
 
   if (!userDetails) return <div>Sign in first...</div>;
-
+  console.log(userDetails);
   return (
     <Container maxW="2xl" bg="#f1f1f1" className="rounded-2xl p-5">
       {/* nickname */}
@@ -132,6 +142,16 @@ const Signup = () => {
             placeholder="basketball, jogging, swimming, hit the gym"
             name="activities"
             onChange={(e) => setActivities(e.target.value)}
+            required
+          />
+        </FormControl>
+        {/* address */}
+        <FormControl mt={4} isRequired>
+          <FormLabel>Where do you stay?</FormLabel>
+          <Input
+            placeholder="near Central Park, near Taj Mahal, etc"
+            name="address"
+            onChange={(e) => setAddress(e.target.value)}
             required
           />
         </FormControl>

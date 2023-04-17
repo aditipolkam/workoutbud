@@ -16,6 +16,7 @@ export const useLogin = () => {
       const tuser = {
         // id: false,
         displayName: details.displayName,
+        avatar: details.photoURL,
         email: details.email,
         token: details.accessToken,
       };
