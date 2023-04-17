@@ -1,1 +1,1 @@
-export const QUIZ = "quiz";
+export const USERCOLLECTION = "users";

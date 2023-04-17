@@ -25,6 +25,44 @@ const Signup = () => {
   const [timeSlots, setTimeSlots] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
+  const handleSubmit = async (event: any) => {
+    event.preventDefault();
+    console.log(nickname, gender, activities, timeSlots, description);
+    if (nickname && gender && activities && timeSlots && description) {
+      setError("");
+      const data = {
+        nickname,
+        description,
+        gender,
+        activities: activities.split(",").map(function (value: string) {
+          return value.trim();
+        }),
+        timeSlots: timeSlots.split(",").map(function (value: string) {
+          return value.trim();
+        }),
+      };
+      await fetch("/api/update-user", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          console.log(data);
+          if (data.error) {
+            setError(data.error);
+          } else {
+            setError("");
+            window.location.href = "/";
+          }
+        });
+    } else {
+      setError("Please fill all the fields");
+    }
+  };
+
   useEffect(() => {
     if (localStorage) {
       let storeduser = localStorage.getItem("workoutbud_user");
@@ -38,12 +76,13 @@ const Signup = () => {
   return (
     <Container maxW="2xl" bg="#f1f1f1" className="rounded-2xl p-5">
       {/* nickname */}
-      <form action="/api/update-user" method="POST">
+      <form>
         <FormControl mt={4} isRequired>
           <FormLabel>What do you want people to call you?</FormLabel>
           <Input
             placeholder="nick, bob, jen, rach, etc"
             name="nickname"
+            onChange={(e) => setNickname(e.target.value)}
             required
           />
         </FormControl>
@@ -53,6 +92,7 @@ const Signup = () => {
           <Input
             placeholder="your profession or basically what you do"
             name="description"
+            onChange={(e) => setDescription(e.target.value)}
             required
           />
         </FormControl>
@@ -60,9 +100,15 @@ const Signup = () => {
         <FormLabel mt={4}>What is your gender identity?</FormLabel>
         <RadioGroup name="gender">
           <HStack spacing="24px">
-            <Radio value="Female">Female</Radio>
-            <Radio value="Male">Male</Radio>
-            <Radio value="Other">Other</Radio>
+            <Radio value="Female" onChange={(e) => setGender(e.target.value)}>
+              Female
+            </Radio>
+            <Radio value="Male" onChange={(e) => setGender(e.target.value)}>
+              Male
+            </Radio>
+            <Radio value="Other" onChange={(e) => setGender(e.target.value)}>
+              Other
+            </Radio>
           </HStack>
         </RadioGroup>
         {/* interesting activities */}
@@ -74,6 +120,7 @@ const Signup = () => {
           <Input
             placeholder="basketball, jogging, swimming, hit the gym"
             name="activities"
+            onChange={(e) => setActivities(e.target.value)}
             required
           />
         </FormControl>
@@ -86,6 +133,7 @@ const Signup = () => {
           <Input
             placeholder="7am-9am, 6:30pm-7:30pm"
             name="time_slots"
+            onChange={(e) => setTimeSlots(e.target.value)}
             required
           />
         </FormControl>
@@ -95,7 +143,7 @@ const Signup = () => {
           variant={"outline"}
           type="submit"
           // isLoading={}
-          //onClick={handleSubmit}
+          onClick={handleSubmit}
         >
           Submit
         </Button>

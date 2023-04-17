@@ -2,26 +2,27 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
 type Data = {
-  name: string
+  message: string
 }
 
 export default function handler(
   req: NextApiRequest,
   res: NextApiResponse<Data>
 ) {
-    const {nickname, gender, activities, time_slots, description} = req.body;
+    const {nickname, gender, activities, timeSlots, description} = req.body;
     console.log(req.body)
-    if (nickname && gender && activities && time_slots && description) {
+    if (nickname && gender && activities && timeSlots && description) {
       const data = {
         nickname,
         description,
         gender,
-        activities: activities.split(",").map(function (value:string) {return value.trim()}),
-        timeSlots: time_slots.split(",").map(function (value:string) {return value.trim()}),
+        activities,
+        timeSlots,
       };
       console.log(data);
+      res.status(200).json({ message: 'Successfull' })
     } else {
       console.log("error");
     }
-  res.status(200).json({ name: 'John Doe' })
+  
 }

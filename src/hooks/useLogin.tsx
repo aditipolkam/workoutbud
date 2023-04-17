@@ -2,6 +2,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth, db } from "@/config/firebase";
 import { useState } from "react";
 import { User } from "@/types";
+import { USERCOLLECTION } from "@/config/dbVars";
 import { collection, getDocs, query, where } from "firebase/firestore";
 const provider = new GoogleAuthProvider();
 
@@ -26,6 +27,21 @@ export const useLogin = () => {
     }
   };
 
+  const storeProfile = async (details: any) => {
+    const q = query(
+      collection(db, USERCOLLECTION),
+      where("email", "==", details.email)
+    );
+    const querySnapshot = await getDocs(q);
+    if (querySnapshot.empty) {
+      console.log("No matching documents.");
+      return;
+    }
+    querySnapshot.forEach((doc) => {
+      console.log(doc.id, " => ", doc.data());
+    });
+  };
+
   const login = async () => {
     setIsPending(true);
     await signInWithPopup(auth, provider)
@@ -34,6 +50,7 @@ export const useLogin = () => {
         console.log(userDetails);
         addToLocalStorage(userDetails);
         //create a user profile
+        storeProfile(userDetails);
         setRegisterStatus(true);
         setIsPending(false);
         window.location.reload();
