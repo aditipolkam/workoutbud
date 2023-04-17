@@ -36,6 +36,7 @@ export const useLogin = () => {
         //create a user profile
         setRegisterStatus(true);
         setIsPending(false);
+        window.location.reload();
       })
       .catch((error) => {
         setRegisterStatus(false);
@@ -48,6 +49,7 @@ export const useLogin = () => {
   const logout = () => {
     setUser(null);
     localStorage.removeItem("workoutbud_user");
+    window.location.reload();
   };
 
   return { login, logout, user, isPending, registerStatus };
