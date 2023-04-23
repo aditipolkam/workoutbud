@@ -4,6 +4,7 @@ import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
 import { useLogin } from "@/hooks/useLogin";
 import { useEffect, useState } from "react";
 import { User } from "@/types";
+import CustomButton from "../common/CustomButton";
 import Link from "next/link";
 
 const Navbar = () => {
@@ -21,7 +22,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-between flex-row mb-10">
       <Link href={"/"}>
-        <div className="font-bold text-2xl">workoutbud</div>
+        <div className="font-bold text-2xl text-purple-700">workoutbud</div>
       </Link>
       <div>
         {userDetails ? (
@@ -36,14 +37,10 @@ const Navbar = () => {
             </MenuList>
           </Menu>
         ) : (
-          <Button
-            leftIcon={<MdBuild />}
-            colorScheme="gray"
-            variant="outline"
-            onClick={login}
-          >
-            Sign In
-          </Button>
+          <CustomButton variant="outline" handleClick={login}>
+            <p className="mx-1">Log In</p>
+            <MdBuild />
+          </CustomButton>
         )}
       </div>
     </div>

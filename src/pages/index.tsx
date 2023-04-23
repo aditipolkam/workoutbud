@@ -4,9 +4,10 @@ import { User, UserProfile } from "@/types";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "@/config/firebase";
 import { USERCOLLECTION } from "@/config/dbVars";
-import UserCard from "@/components/common/UserCard";
-import { Grid, GridItem } from "@chakra-ui/react";
 import useGeoLocation from "@/hooks/useGeoLocation";
+import Image from "next/image";
+import home from "../assets/home.png";
+import CustomButton from "@/components/common/CustomButton";
 
 export default function Home() {
   const { login, user, logout } = useLogin();
@@ -34,21 +35,22 @@ export default function Home() {
 
   console.log(users);
 
-  if (!userDetails) return <div>Sign in first...</div>;
   return (
-    <main className="flex flex-col items-center justify-between p-24">
-      {location.loaded ? JSON.stringify(location) : "Loading..."}
-      <Grid templateColumns="repeat(2, 1fr)" gap={6}>
-        {users
-          .filter(function (item) {
-            return item.email != userDetails.email;
-          })
-          .map((user) => (
-            <GridItem key={user.nickname} w="100%">
-              <UserCard data={user} />
-            </GridItem>
-          ))}
-      </Grid>
+    <main className="flex items-center justify-between py-24 w-full justify-between">
+      <div>
+        <p className="text-5xl font-bold pr-16">
+          let&apos;s find your{" "}
+          <span className="text-purple-400">fitness buddy</span> match in
+          seconds
+        </p>
+        <div className="flex mt-10">
+          <CustomButton variant="outline">Register</CustomButton>
+          <CustomButton variant="solid">Find Buddy</CustomButton>
+        </div>
+
+        {/* {location.loaded ? JSON.stringify(location) : "Loading..."} */}
+      </div>
+      <Image src={home} width={400} height={400} alt="Home Image" />
     </main>
   );
 }
