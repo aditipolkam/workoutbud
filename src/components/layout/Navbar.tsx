@@ -1,23 +1,14 @@
 import { MdAccountCircle, MdBuild } from "react-icons/md";
 import { BsChevronDown } from "react-icons/bs";
 import { Button, Menu, MenuButton, MenuList, MenuItem } from "@chakra-ui/react";
-import { useLogin } from "@/hooks/useLogin";
-import { useEffect, useState } from "react";
-import { User } from "@/types";
+import { useContext } from "react";
 import CustomButton from "../common/CustomButton";
 import Link from "next/link";
+import AuthContext from "@/context/authContext";
 
 const Navbar = () => {
-  const { login, user, logout } = useLogin();
-  const [userDetails, setUserDetails] = useState<User | null>(null);
-
-  useEffect(() => {
-    if (localStorage) {
-      let storeduser = localStorage.getItem("workoutbud_user");
-      if (storeduser) setUserDetails(JSON.parse(storeduser));
-      else setUserDetails(null);
-    }
-  }, [user]);
+  const { user, authReady, isPending, error, registerStatus, login, logout } =
+    useContext(AuthContext);
 
   return (
     <div className="flex justify-between flex-row mb-10">
@@ -25,10 +16,13 @@ const Navbar = () => {
         <div className="font-bold text-2xl text-purple-700">workoutbud</div>
       </Link>
       <div>
-        {userDetails ? (
+        {user ? (
           <Menu>
             <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-              {userDetails.displayName}
+              <div className="flex justify-center items-center">
+                <p className="mx-1">User</p>
+                <MdAccountCircle />
+              </div>
             </MenuButton>
             <MenuList>
               <MenuItem>Profile</MenuItem>
@@ -42,6 +36,7 @@ const Navbar = () => {
             <MdBuild />
           </CustomButton>
         )}
+        {/*  */}
       </div>
     </div>
   );

@@ -1,26 +1,36 @@
-interface User {
-   // id: number;
-   avatar: string;
-    displayName: string;
-    email: string;
-    token: string;
-}
+export type AuthContextTypes = {
+    user: string | null;
+    authReady: boolean;
+    isPending: boolean;
+    error: string | null;
+    registerStatus: boolean;
+    login: () => void;
+    logout: () => void;
+  };
 
-interface UserProfile {
-    email: string;
-    avatar: string;
-    nickname: string;
+
+export type UserData ={
+    displayName: string;
     address: string;
     gender: string;
-    description: string;
-    activities: string[];
+    bio: string;
+    activities: Activity[];
     timeSlots: string[];
 }
 
-interface LocationState{
+export type Activity ={
+    name: string;
+    description: string;
+    location: {
+        coordinates:{lat: number, lng: number},
+        address: string
+    };
+    time: Date
+}
+
+export type NavLocationState = {
     loaded: boolean;
     coordinates?: { lat: string; lng: string };
     error?: { code: number; message: string };
   };
 
-export type { User, UserProfile, LocationState };

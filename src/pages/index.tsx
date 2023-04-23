@@ -1,40 +1,18 @@
-import { useEffect, useState } from "react";
-import { useLogin } from "@/hooks/useLogin";
-import { User, UserProfile } from "@/types";
+import { useEffect, useState, useContext } from "react";
 import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/config/firebase";
-import { USERCOLLECTION } from "@/config/dbVars";
+import { db } from "@/config/firebaseClient";
+import AuthContext from "@/context/authContext";
 import useGeoLocation from "@/hooks/useGeoLocation";
 import Image from "next/image";
 import home from "../assets/home.png";
 import CustomButton from "@/components/common/CustomButton";
 
 export default function Home() {
-  const { login, user, logout } = useLogin();
-  const [userDetails, setUserDetails] = useState<User | null>(null);
-  const [users, setUsers] = useState<UserProfile[]>([]);
   const location = useGeoLocation();
-  useEffect(() => {
-    if (localStorage) {
-      let storeduser = localStorage.getItem("workoutbud_user");
-      if (storeduser) setUserDetails(JSON.parse(storeduser));
-      else setUserDetails(null);
-    }
-  }, [user]);
+  const { user, authReady, isPending, error, registerStatus, login, logout } =
+    useContext(AuthContext);
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      if (userDetails) {
-        const collectionRef = collection(db, USERCOLLECTION);
-        const data = await getDocs(collectionRef);
-        setUsers(data.docs.map((doc) => doc.data() as UserProfile));
-      }
-    };
-    fetchUsers();
-  }, [userDetails]);
-
-  console.log(users);
-
+  if (!authReady) return <div>Loading...</div>;
   return (
     <main className="flex items-center justify-between py-24 w-full justify-between">
       <div>
