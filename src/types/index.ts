@@ -7,6 +7,7 @@ interface User {
 }
 
 interface UserProfile {
+    email: string;
     avatar: string;
     nickname: string;
     address: string;
@@ -16,4 +17,10 @@ interface UserProfile {
     timeSlots: string[];
 }
 
-export type { User, UserProfile };
+interface LocationState{
+    loaded: boolean;
+    coordinates?: { lat: string; lng: string };
+    error?: { code: number; message: string };
+  };
+
+export type { User, UserProfile, LocationState };
