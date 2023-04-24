@@ -20,7 +20,7 @@ export default function Home() {
           seconds
         </p>
         <div className="flex mt-10">
-          <CustomButton variant="outline">Register</CustomButton>
+          {/* <CustomButton variant="outline">Register</CustomButton> */}
           <CustomButton variant="solid">Find Buddy</CustomButton>
         </div>
 

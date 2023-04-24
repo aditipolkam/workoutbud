@@ -17,23 +17,25 @@ const Navbar = () => {
       </Link>
       <div>
         {user ? (
-          <Menu>
-            <MenuButton as={Button} rightIcon={<BsChevronDown />}>
-              <div className="flex justify-center items-center">
-                <p className="mx-1">User</p>
-                <MdAccountCircle />
-              </div>
-            </MenuButton>
-            <MenuList>
-              <MenuItem>Profile</MenuItem>
-              <MenuItem>Setting</MenuItem>
-              <MenuItem onClick={logout}>Logout</MenuItem>
-            </MenuList>
-          </Menu>
+          // <Menu>
+          //   <MenuButton as={Button} rightIcon={<BsChevronDown />}>
+          //     <div className="flex justify-center items-center">
+          //       <p className="mx-1">User</p>
+          //       <MdAccountCircle />
+          //     </div>
+          //   </MenuButton>
+          //   <MenuList>
+          //     <MenuItem>Profile</MenuItem>
+          //     <MenuItem>Setting</MenuItem>
+          //     <MenuItem onClick={logout}>Logout</MenuItem>
+          //   </MenuList>
+          // </Menu>
+          <CustomButton variant="outline" handleClick={logout}>
+            <p className="mx-1">Log Out</p>
+          </CustomButton>
         ) : (
           <CustomButton variant="outline" handleClick={login}>
             <p className="mx-1">Log In</p>
-            <MdBuild />
           </CustomButton>
         )}
         {/*  */}
