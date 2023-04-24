@@ -1,6 +1,4 @@
 import { useEffect, useState, useContext } from "react";
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "@/config/firebaseClient";
 import AuthContext from "@/context/authContext";
 import useGeoLocation from "@/hooks/useGeoLocation";
 import Image from "next/image";

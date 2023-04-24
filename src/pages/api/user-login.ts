@@ -13,14 +13,18 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
       if (doc.exists) {
         const userData = doc.data();
         console.log(userData);
-        return res.status(200).json({ data: userData  })
+        return res.status(200).json({ data: {uid} })
       } else {
         console.log("User document not found");
-        return res.status(404).json({ message: "User document not found."  })
+        //add doc to firebase
+        await admin.firestore().collection('users').doc(uid).set({
+          email: email,
+        })
+        return res.status(201).json({ data: {uid}})
       }
   }
   catch(error){
-    res.status(401).json({ message: "Invalid or expired token."  })
     console.error("Error verifying token:", error);
+    res.status(401).json({ message: "Invalid or expired token."  })
   }
 }

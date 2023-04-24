@@ -1,8 +1,10 @@
 import { useState } from "react";
+import SignUpContainer from "@/components/common/SignUpContainer";
 import GooglePlacesAutocomplete from "react-google-places-autocomplete";
+import { FormControl, FormLabel } from "@chakra-ui/react";
 import { getLatLng, geocodeByAddress } from "react-google-places-autocomplete";
 
-const Search = () => {
+const Location = () => {
   const [address, setAddress] = useState<any>(null);
 
   const handleSelect = async (value: any) => {
@@ -13,14 +15,22 @@ const Search = () => {
     setAddress(latLng);
   };
 
-  console.log(address);
+  const handleLocation = () => {};
 
   return (
-    <GooglePlacesAutocomplete
-      apiKey={process.env.NEXT_PUBLIC_MAPS_API_KEY}
-      selectProps={{ onChange: handleSelect }}
-    />
+    <SignUpContainer handleClick={handleLocation}>
+      <FormControl mt={4}>
+        <FormLabel>
+          <p>what do you want people to call you?</p>
+        </FormLabel>
+
+        <GooglePlacesAutocomplete
+          apiKey={process.env.NEXT_PUBLIC_MAPS_API_KEY}
+          selectProps={{ onChange: handleSelect }}
+        />
+      </FormControl>
+    </SignUpContainer>
   );
 };
 
-export default Search;
+export default Location;

@@ -43,37 +43,38 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
   // };
 
   const storeDetailsToFirestore = async (token: string) => {
-    const { data } = await axios.post(
+    const res = await axios.post(
       "/api/user-login",
       { accessToken: token },
       { headers: { "Content-Type": "application/json" } }
     );
-    console.log("data", data);
+
+    if (res.status === 200 || res.status === 201) {
+      setUser(res.data.uid);
+      setRegisterStatus(true);
+      setAuthReady(true);
+    } else {
+      setRegisterStatus(false);
+      setError(res.data.message);
+    }
   };
 
   const login = async () => {
     setIsPending(true);
-    signInWithPopup(auth, provider)
-      .then((result) => {
-        console.log("auth", auth.currentUser);
-        if (auth.currentUser) {
-          auth.currentUser.getIdToken().then((token) => {
-            console.log("token", token);
-            setUser(token);
-            storeDetailsToFirestore(token);
-          });
-        }
-        setRegisterStatus(true);
+    try {
+      await signInWithPopup(auth, provider);
+      if (auth.currentUser) {
+        const token = await auth.currentUser.getIdToken();
+        console.log("token", token);
+        await storeDetailsToFirestore(token);
         setIsPending(false);
-        //addToLocalStorage(userDetails);
-        //handleChange();
-      })
-      .catch((error) => {
-        console.error("Some error", error.message);
-        setRegisterStatus(false);
-        setError(error.message);
-        setIsPending(false);
-      });
+      }
+    } catch (error: any) {
+      console.error("Some error", error.message);
+      setRegisterStatus(false);
+      setError(error.message);
+      setIsPending(false);
+    }
   };
 
   const logout = () => {

@@ -1,6 +1,5 @@
 import React from "react";
 import { Button } from "@chakra-ui/react";
-import { IconType } from "react-icons/lib";
 
 type ButtonProps = {
   variant: "outline" | "solid" | undefined;
