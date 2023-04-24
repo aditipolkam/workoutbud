@@ -1,9 +1,9 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import { LocationState } from "@/types";
+import { NavLocationState } from "@/types";
 
 const useGeoLocation = () => {
-  const [location, setLocation] = useState<LocationState>({
+  const [location, setLocation] = useState<NavLocationState>({
     loaded: false,
     coordinates: { lat: "", lng: "" },
   });
