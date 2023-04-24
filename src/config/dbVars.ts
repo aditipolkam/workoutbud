@@ -1,1 +1,1 @@
-export const USERCOLLECTION = "users";
+export const USER_COLLECTION = "users";

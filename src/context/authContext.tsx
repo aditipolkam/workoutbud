@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/config/firebaseClient";
 import { AuthContextTypes } from "@/types";
+import axios from "axios";
 const provider = new GoogleAuthProvider();
 
 const AuthContext = createContext<AuthContextTypes>({
@@ -41,18 +42,13 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
   //   }
   // };
 
-  const storeDetailsToFirestore = (token: string) => {
-    fetch("/api/user-login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ accessToken: token }),
-    })
-      .then((res) => {
-        res.json();
-      })
-      .then((data) => {
-        console.log(data);
-      });
+  const storeDetailsToFirestore = async (token: string) => {
+    const { data } = await axios.post(
+      "/api/user-login",
+      { accessToken: token },
+      { headers: { "Content-Type": "application/json" } }
+    );
+    console.log("data", data);
   };
 
   const login = async () => {
@@ -64,7 +60,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
           auth.currentUser.getIdToken().then((token) => {
             console.log("token", token);
             setUser(token);
-            //storeDetailsToFirestore(token);
+            storeDetailsToFirestore(token);
           });
         }
         setRegisterStatus(true);

@@ -14,7 +14,13 @@ export default function CustomButton({
   children,
 }: ButtonProps) {
   return (
-    <Button variant={variant} onClick={handleClick} colorScheme="purple" m={2}>
+    <Button
+      variant={variant}
+      onClick={handleClick}
+      colorScheme="purple"
+      m={2}
+      minWidth={36}
+    >
       {children}
     </Button>
   );
