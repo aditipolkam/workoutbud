@@ -3,6 +3,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "@/config/firebaseClient";
 import { AuthContextTypes } from "@/types";
 import axios from "axios";
+import { useRouter } from "next/router";
 const provider = new GoogleAuthProvider();
 
 const AuthContext = createContext<AuthContextTypes>({
@@ -16,31 +17,33 @@ const AuthContext = createContext<AuthContextTypes>({
 });
 
 export const AuthContextProvider = ({ children }: { children: any }) => {
+  const router = useRouter();
   const [user, setUser] = useState<null | string>(null);
   const [authReady, setAuthReady] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [isPending, setIsPending] = useState<boolean>(false);
   const [registerStatus, setRegisterStatus] = useState<boolean>(false);
 
+  useEffect(() => {
+    const user = localStorage.getItem("workoutbud_user");
+    if (user) {
+      setUser(user);
+    }
+  }, []);
+
   function handleChange() {
     window.location.reload();
   }
 
-  //   add user to localStorage
-  // const addToLocalStorage = (details: any) => {
-  //   if (localStorage) {
-  //     const tuser = {
-  //       email: details.email,
-  //       uid: details.uid,
-  //       displayName: details.displayName,
-  //     };
-  //     setUser(tuser);
-  //     localStorage.setItem("workoutbud_user", JSON.stringify(tuser));
-  //     console.log("added item to local storage");
-  //   } else {
-  //     // No support. Use a fallback such as browser cookies or store on the server.
-  //   }
-  // };
+  // add user to localStorage
+  const addToLocalStorage = (uid: string) => {
+    if (localStorage) {
+      localStorage.setItem("workoutbud_user", uid);
+      console.log("added item to local storage");
+    } else {
+      // No support. Use a fallback such as browser cookies or store on the server.
+    }
+  };
 
   const storeDetailsToFirestore = async (token: string) => {
     const res = await axios.post(
@@ -53,6 +56,15 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       setUser(res.data.uid);
       setRegisterStatus(true);
       setAuthReady(true);
+      setError(null);
+      addToLocalStorage(res.data.uid);
+      if (!res.data.name) router.push("/signup/name");
+      else if (!res.data.gender) router.push("/signup/gender");
+      else if (!res.data.bio) router.push("/signup/bio");
+      else if (!res.data.location) router.push("/signup/location");
+      else if (!res.data.activities) router.push("/signup/activities");
+      //check which page to redirect to
+      router.push("/signup/name");
     } else {
       setRegisterStatus(false);
       setError(res.data.message);
@@ -79,7 +91,8 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
 
   const logout = () => {
     setUser(null);
-    //localStorage.removeItem("workoutbud_user");
+    localStorage.removeItem("workoutbud_user");
+    router.push("/");
     //handleChange();
   };
 

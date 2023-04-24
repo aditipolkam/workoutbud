@@ -4,13 +4,14 @@ import useGeoLocation from "@/hooks/useGeoLocation";
 import Image from "next/image";
 import home from "../assets/home.png";
 import CustomButton from "@/components/common/CustomButton";
+import { Loading } from "@/components/common/Loader";
 
 export default function Home() {
   const location = useGeoLocation();
   const { user, authReady, isPending, error, registerStatus, login, logout } =
     useContext(AuthContext);
 
-  if (!authReady) return <div>Loading...</div>;
+  if (isPending) return <Loading />;
   return (
     <main className="flex items-center justify-between py-24 w-full justify-between">
       <div>
