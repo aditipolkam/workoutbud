@@ -23,6 +23,8 @@
     "firebase": "^9.19.1",
     "firebase-admin": "^11.7.0",
     "framer-motion": "^10.12.2",
+    "haversine": "^1.1.1",
+    "nearby-sort": "^1.1.0",
     "next": "13.3.0",
     "postcss": "8.4.21",
     "react": "18.2.0",
@@ -31,5 +33,8 @@
     "react-icons": "^4.8.0",
     "tailwindcss": "3.3.1",
     "typescript": "5.0.4"
+  },
+  "devDependencies": {
+    "@types/haversine": "^1.1.5"
   }
 }
