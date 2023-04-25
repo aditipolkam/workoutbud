@@ -24,6 +24,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
   const [isPending, setIsPending] = useState<boolean>(false);
   const [registerStatus, setRegisterStatus] = useState<boolean>(false);
 
+  console.log(user);
   useEffect(() => {
     const user = localStorage.getItem("workoutbud_user");
     if (user) {
@@ -57,6 +58,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       setRegisterStatus(true);
       setAuthReady(true);
       setError(null);
+      console.log("res.data", res);
       addToLocalStorage(res.data.uid);
       if (!res.data.name) router.push("/signup/name");
       else if (!res.data.gender) router.push("/signup/gender");
@@ -64,7 +66,6 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       else if (!res.data.location) router.push("/signup/location");
       else if (!res.data.activities) router.push("/signup/activities");
       //check which page to redirect to
-      router.push("/signup/name");
     } else {
       setRegisterStatus(false);
       setError(res.data.message);

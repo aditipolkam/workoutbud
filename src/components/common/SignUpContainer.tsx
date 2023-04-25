@@ -17,9 +17,10 @@ const SignUpContainer = ({
       rounded={10}
       p={5}
       shadow={"md"}
+      mb={20}
     >
       {children}
-      <Center mt={2}>
+      <Center mt={5}>
         <CustomButton variant="solid" handleClick={handleClick}>
           Next
         </CustomButton>

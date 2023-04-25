@@ -13,7 +13,7 @@ const MainLayout = ({ children }: { children: ReactNode }) => {
           content="Automate question paper generation from a crowd-sourced question bank."
         />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link rel="icon" href="" />
+        <link rel="icon" href="/workoutbud.png" />
       </Head>
       <main className="px-40 py-8 min-h-screen">
         <Navbar />
