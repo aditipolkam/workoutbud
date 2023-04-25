@@ -9,23 +9,15 @@ export type AuthContextTypes = {
   };
 
 
-export type UserData ={
-    displayName: string;
-    address: string;
-    gender: string;
-    bio: string;
-    activities: Activity[];
-    timeSlots: string[];
-}
-
 export type Activity ={
     name: string;
     description: string;
+    days: string[];
     location: {
         coordinates:{lat: number, lng: number},
         address: string
     };
-    time: Date
+    timeSlots: string[]
 }
 
 export type NavLocationState = {

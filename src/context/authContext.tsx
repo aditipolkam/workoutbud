@@ -63,7 +63,6 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       if (!res.data.name) router.push("/signup/name");
       else if (!res.data.gender) router.push("/signup/gender");
       else if (!res.data.bio) router.push("/signup/bio");
-      else if (!res.data.location) router.push("/signup/location");
       else if (!res.data.activities) router.push("/signup/activities");
       //check which page to redirect to
     } else {
