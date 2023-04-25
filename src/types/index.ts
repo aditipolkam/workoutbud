@@ -10,6 +10,7 @@ export type AuthContextTypes = {
 
 
 export type Activity ={
+    uid:string,
     name: string;
     description: string;
     days: string[];

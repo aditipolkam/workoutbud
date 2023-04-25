@@ -8,6 +8,8 @@ import axios from "axios";
 import { Activity } from "@/types";
 import { SimpleGrid } from "@chakra-ui/react";
 import ActivityCard from "@/components/ActivityCard";
+import CustomButton from "@/components/common/CustomButton";
+import Link from "next/link";
 
 const Index = () => {
   const router = useRouter();
@@ -17,12 +19,17 @@ const Index = () => {
   console.log(location);
 
   const getActivities = async () => {
-    const res = await axios.post(`/api/activities`, {
-      location,
-      radius: 100,
-    });
-    setActivities(res.data);
-    console.log(res.data);
+    try {
+      const res = await axios.post(`/api/activities`, {
+        location,
+        radius: 100,
+      });
+      if (res.status == 400) return console.log(res.data);
+      if (res.status !== 200) return console.log(res.data);
+      setActivities(res.data);
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
@@ -35,6 +42,12 @@ const Index = () => {
   }, [location.loaded]);
   return (
     <div>
+      <div className="flex justify-between">
+        <div></div>
+        <Link href={"/signup/activities"}>
+          <CustomButton variant="solid">Add Activity</CustomButton>
+        </Link>
+      </div>
       <SimpleGrid
         spacing={4}
         templateColumns="repeat(auto-fill, minmax(400px, 1fr))"

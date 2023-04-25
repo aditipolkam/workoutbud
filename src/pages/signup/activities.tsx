@@ -1,5 +1,5 @@
 import SignUpContainer from "@/components/common/SignUpContainer";
-import React from "react";
+import React, { useEffect } from "react";
 import {
   FormControl,
   FormLabel,
@@ -31,6 +31,7 @@ const Activities = () => {
   const { user } = useContext(AuthContext);
   const [isPending, setIsPending] = React.useState<boolean>(false);
   const [activity, setActivity] = React.useState<Activity | null>({
+    uid: user ?? "",
     name: "",
     description: "",
     timeSlots: [],
@@ -44,6 +45,7 @@ const Activities = () => {
     },
   });
   const [activities, setActivities] = React.useState<Activity[]>([]);
+  console;
 
   const handleSelect = async (value: any) => {
     let latLng: any = null;
@@ -110,6 +112,10 @@ const Activities = () => {
 
   const handleActivities = async () => {
     //console.log(activities);
+    if (activities.length === 0) {
+      alert("Please add atleast one activity");
+      return;
+    }
     setIsPending(true);
     const res = await axios.post(
       "/api/update/user-activities",
@@ -125,6 +131,8 @@ const Activities = () => {
     if (res.status === 200) router.push("/app");
   };
 
+  console.log(activity);
+
   return (
     <>
       <SignUpContainer handleClick={handleActivities}>
@@ -137,6 +145,15 @@ const Activities = () => {
               p={2}
               colorScheme="purple"
               onClick={() => {
+                setActivity((prevActivity) => {
+                  if (prevActivity) {
+                    return {
+                      ...prevActivity,
+                      uid: user ?? "",
+                    };
+                  }
+                  return null;
+                });
                 setActivities((prevActivities) => {
                   if (activity) {
                     return [...prevActivities, activity];
@@ -144,6 +161,7 @@ const Activities = () => {
                   return prevActivities;
                 });
                 setActivity({
+                  uid: user ?? "",
                   name: "",
                   description: "",
                   timeSlots: [],
