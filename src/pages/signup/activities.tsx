@@ -218,31 +218,33 @@ const Activities = () => {
           </div>
         </FormControl>
       </SignUpContainer>
-      <Table variant="simple">
-        <TableCaption>Activities</TableCaption>
-        <Thead>
-          <Tr>
-            <Th>Name</Th>
-            <Th>Description</Th>
-            <Th>Days</Th>
-            <Th>Time</Th>
-            <Th>Location</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {activities.map((activity, index) => {
-            return (
-              <Tr key={index}>
-                <Td>{activity.name}</Td>
-                <Td>{activity.description}</Td>
-                <Td>{activity.days.join(" ")}</Td>
-                <Td>{activity.timeSlots.join(", ")}</Td>
-                <Td>{activity.location.address}</Td>
-              </Tr>
-            );
-          })}
-        </Tbody>
-      </Table>
+      {activities.length > 0 && (
+        <Table variant="simple">
+          <TableCaption>Activities</TableCaption>
+          <Thead>
+            <Tr>
+              <Th>Name</Th>
+              <Th>Description</Th>
+              <Th>Days</Th>
+              <Th>Time</Th>
+              <Th>Location</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {activities.map((activity, index) => {
+              return (
+                <Tr key={index}>
+                  <Td>{activity.name}</Td>
+                  <Td>{activity.description}</Td>
+                  <Td>{activity.days.join(" ")}</Td>
+                  <Td>{activity.timeSlots.join(", ")}</Td>
+                  <Td>{activity.location.address}</Td>
+                </Tr>
+              );
+            })}
+          </Tbody>
+        </Table>
+      )}
     </>
   );
 };

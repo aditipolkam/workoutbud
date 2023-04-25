@@ -5,11 +5,17 @@ import Image from "next/image";
 import home from "../assets/home.png";
 import CustomButton from "@/components/common/CustomButton";
 import { Loading } from "@/components/common/Loader";
+import { useRouter } from "next/router";
 
 export default function Home() {
+  const router = useRouter();
   const location = useGeoLocation();
   const { user, authReady, isPending, error, registerStatus, login, logout } =
     useContext(AuthContext);
+
+  useEffect(() => {
+    if (user) router.push("/app");
+  }, []);
 
   if (isPending) return <Loading />;
   return (
