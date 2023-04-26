@@ -43,6 +43,10 @@ const Index = () => {
       if (lat && lng) getActivities();
     }
   }, [location.loaded, location.coordinates, user, router, radius]);
+
+  if (!location.loaded) return <>Loading location</>;
+  if (location.loaded && !location.coordinates)
+    return <>Location not found, please allow location permission</>;
   return (
     <div className="mb-10">
       <div className="flex justify-between">
@@ -61,8 +65,8 @@ const Index = () => {
         </Link>
       </div>
       <SimpleGrid
-        spacing={4}
-        templateColumns="repeat(auto-fill, minmax(400px, 1fr))"
+        spacing={2}
+        templateColumns="repeat(auto-fill, minmax(300px, 1fr))"
       >
         {activities.length > 0 &&
           activities.map((activity: any, index: number) => {

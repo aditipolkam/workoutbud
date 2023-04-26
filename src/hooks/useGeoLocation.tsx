@@ -5,7 +5,7 @@ import { NavLocationState } from "@/types";
 const useGeoLocation = () => {
   const [location, setLocation] = useState<NavLocationState>({
     loaded: false,
-    coordinates: { lat: "", lng: "" },
+    coordinates: { lat: null, lng: null },
   });
 
   const onSuccess = (location: any) => {

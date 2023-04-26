@@ -10,12 +10,12 @@ export type AuthContextTypes = {
 
 
 export type Activity ={
-    uid:string,
+    uid:string | null,
     name: string;
     description: string;
     days: string[];
     location: {
-        coordinates:{lat: number, lng: number},
+        coordinates:{lat: number | null, lng: number | null},
         address: string
     };
     timeSlots: string[]
@@ -23,7 +23,7 @@ export type Activity ={
 
 export type NavLocationState = {
     loaded: boolean;
-    coordinates?: { lat: string; lng: string };
+    coordinates?: { lat: string | null; lng: string| null};
     error?: { code: number; message: string };
   };
 

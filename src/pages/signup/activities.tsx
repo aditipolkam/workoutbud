@@ -31,7 +31,7 @@ const Activities = () => {
   const { user } = useContext(AuthContext);
   const [isPending, setIsPending] = React.useState<boolean>(false);
   const [activity, setActivity] = React.useState<Activity | null>({
-    uid: user ?? "",
+    uid: user,
     name: "",
     description: "",
     timeSlots: [],
@@ -39,13 +39,22 @@ const Activities = () => {
     location: {
       address: "",
       coordinates: {
-        lat: 0,
-        lng: 0,
+        lat: null,
+        lng: null,
       },
     },
   });
   const [activities, setActivities] = React.useState<Activity[]>([]);
-  console;
+
+  useEffect(() => {
+    if (user)
+      setActivity((prevActivity) => {
+        if (prevActivity) {
+          return { ...prevActivity, uid: user };
+        }
+        return null;
+      });
+  }, [user]);
 
   const handleSelect = async (value: any) => {
     let latLng: any = null;
@@ -131,53 +140,52 @@ const Activities = () => {
     if (res.status === 200) router.push("/app");
   };
 
+  const handleAddActivity = () => {
+    if (
+      !activity?.name ||
+      !activity?.description ||
+      !activity?.days ||
+      !activity?.location.address ||
+      !activity?.location.coordinates.lat ||
+      !activity?.location.coordinates.lng ||
+      activity?.timeSlots.length === 0 ||
+      !activity?.uid
+    ) {
+      alert("Please fill all the fields");
+      return;
+    }
+    setActivities((prevActivities) => {
+      if (activity) {
+        return [...prevActivities, activity];
+      }
+      return prevActivities;
+    });
+    setActivity({
+      uid: user,
+      name: "",
+      description: "",
+      timeSlots: [],
+      days: [],
+      location: {
+        address: "",
+        coordinates: {
+          lat: null,
+          lng: null,
+        },
+      },
+    });
+  };
+
   console.log(activity);
 
   return (
     <>
-      <SignUpContainer handleClick={handleActivities}>
+      <SignUpContainer handleClick={handleAddActivity}>
         <FormControl mt={4}>
           <div className="flex justify-between">
             <FormLabel>
               <p>What activities are you interested in?</p>
             </FormLabel>
-            <Button
-              p={2}
-              colorScheme="purple"
-              onClick={() => {
-                setActivity((prevActivity) => {
-                  if (prevActivity) {
-                    return {
-                      ...prevActivity,
-                      uid: user ?? "",
-                    };
-                  }
-                  return null;
-                });
-                setActivities((prevActivities) => {
-                  if (activity) {
-                    return [...prevActivities, activity];
-                  }
-                  return prevActivities;
-                });
-                setActivity({
-                  uid: user ?? "",
-                  name: "",
-                  description: "",
-                  timeSlots: [],
-                  days: [],
-                  location: {
-                    address: "",
-                    coordinates: {
-                      lat: 0,
-                      lng: 0,
-                    },
-                  },
-                });
-              }}
-            >
-              +
-            </Button>
           </div>
           <div>
             <Input
@@ -237,31 +245,36 @@ const Activities = () => {
         </FormControl>
       </SignUpContainer>
       {activities.length > 0 && (
-        <Table variant="simple">
-          <TableCaption>Activities</TableCaption>
-          <Thead>
-            <Tr>
-              <Th>Name</Th>
-              <Th>Description</Th>
-              <Th>Days</Th>
-              <Th>Time</Th>
-              <Th>Location</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {activities.map((activity, index) => {
-              return (
-                <Tr key={index}>
-                  <Td>{activity.name}</Td>
-                  <Td>{activity.description}</Td>
-                  <Td>{activity.days.join(" ")}</Td>
-                  <Td>{activity.timeSlots.join(", ")}</Td>
-                  <Td>{activity.location.address}</Td>
-                </Tr>
-              );
-            })}
-          </Tbody>
-        </Table>
+        <>
+          <Table variant="simple">
+            <TableCaption>Activities</TableCaption>
+            <Thead>
+              <Tr>
+                <Th>Name</Th>
+                <Th>Description</Th>
+                <Th>Days</Th>
+                <Th>Time</Th>
+                <Th>Location</Th>
+              </Tr>
+            </Thead>
+            <Tbody>
+              {activities.map((activity, index) => {
+                return (
+                  <Tr key={index}>
+                    <Td>{activity.name}</Td>
+                    <Td>{activity.description}</Td>
+                    <Td>{activity.days.join(" ")}</Td>
+                    <Td>{activity.timeSlots.join(", ")}</Td>
+                    <Td>{activity.location.address}</Td>
+                  </Tr>
+                );
+              })}
+            </Tbody>
+          </Table>
+          <Button p={2} colorScheme="purple" onClick={handleAddActivity}>
+            Submit
+          </Button>
+        </>
       )}
     </>
   );
