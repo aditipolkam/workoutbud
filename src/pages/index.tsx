@@ -13,9 +13,14 @@ export default function Home() {
   const { user, authReady, isPending, error, registerStatus, login, logout } =
     useContext(AuthContext);
 
-  useEffect(() => {
-    if (user) router.push("/app");
-  }, [user]);
+  // useEffect(() => {
+  //   if (user) router.push("/app");
+  // }, [user]);
+
+  function handleFindBuddy() {
+    if (!user) router.push("/signup/name");
+    else router.push("/app");
+  }
 
   if (isPending) return <Loading />;
   return (
@@ -28,7 +33,9 @@ export default function Home() {
         </p>
         <div className="flex mt-10">
           {/* <CustomButton variant="outline">Register</CustomButton> */}
-          <CustomButton variant="solid">Find Buddy</CustomButton>
+          <CustomButton variant="solid" handleClick={handleFindBuddy}>
+            Find Buddy
+          </CustomButton>
         </div>
 
         {/* {location.loaded ? JSON.stringify(location) : "Loading..."} */}

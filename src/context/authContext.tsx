@@ -53,6 +53,7 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       { headers: { "Content-Type": "application/json" } }
     );
 
+    let path = "/";
     if (res.status === 200 || res.status === 201) {
       setUser(res.data.uid);
       setRegisterStatus(true);
@@ -60,15 +61,18 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       setError(null);
       console.log("res.data", res);
       addToLocalStorage(res.data.uid);
-      if (!res.data.name) router.push("/signup/name");
-      else if (!res.data.gender) router.push("/signup/gender");
-      else if (!res.data.bio) router.push("/signup/bio");
-      else if (!res.data.activities) router.push("/signup/activities");
+
+      if (!res.data.name) path = "/signup/name";
+      else if (!res.data.gender) path = "/signup/gender";
+      else if (!res.data.bio) path = "/signup/bio";
+      else if (!res.data.activities) path = "/signup/activities";
       //check which page to redirect to
     } else {
       setRegisterStatus(false);
+      path = "/signup/name";
       setError(res.data.message);
     }
+    router.push(path);
   };
 
   const login = async () => {
