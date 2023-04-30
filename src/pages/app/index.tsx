@@ -19,7 +19,7 @@ const Index = () => {
   const { user } = useContext(AuthContext);
   const [activities, setActivities] = React.useState<Activity[]>([]);
 
-  const [sliderValue, setSliderValue] = React.useState(50);
+  const [sliderValue, setSliderValue] = React.useState(150);
 
   const getActivities = async () => {
     try {

@@ -271,7 +271,7 @@ const Activities = () => {
               })}
             </Tbody>
           </Table>
-          <Button p={2} colorScheme="purple" onClick={handleAddActivity}>
+          <Button p={2} colorScheme="purple" onClick={handleActivities}>
             Submit
           </Button>
         </>
