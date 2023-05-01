@@ -5,18 +5,23 @@ import nearbySort from "nearby-sort";
 import haversine from 'haversine';
 import { Activity } from "@/types";
 
-function sortOnDistance(radius:any, location:any,mockData:Activity[]){
-  const r = Number(radius);
+function sortOnDistance(radius:any, location:any, mockData:Activity[]){
+  
+  try{
+    const r = Number(radius);
+    
   const currentLocation = {
     "lat": Number(location.lat),
     "long": Number(location.lng)
   };
-  // { lat: 18.6161, lng: 73.7286 }
+  
   const docs = nearbySort(currentLocation, mockData.map((v) => {
+   
       return {
           ...v,
           lat: v.location.coordinates.lat,
           long: v.location.coordinates.lng
+          
       }
   }), true).then((res: (Activity & { lat: number, long: number })[]) => {
       console.dir(res, { depth: null, colors: true });
@@ -42,10 +47,15 @@ function sortOnDistance(radius:any, location:any,mockData:Activity[]){
       
   });
   return docs;
+
+  }catch(error:any){
+    console.log(error)
+  }
 }
 
 
 export default async function handler(req:NextApiRequest, res:NextApiResponse) {
+  console.log("in req")
   try{
     const { location , radius } = req.body;
     console.log("this",location, radius)
@@ -53,11 +63,12 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
         res.status(400).json({message:"Body empty"})
 
     const snapshot = await db.collection(ACTIVITIES_COLLECTION).get()
+    
     if(!snapshot) res.status(404).json({message:"Nothing found"})
     const documents =  snapshot.docs.map(doc => doc.data());
     if(documents.length == 0) res.status(404).json({message:"Nothing found"})
-    const sortedDocs = await sortOnDistance(radius,location.coordinates,documents as Activity[])
-    console.log("sortedDocs",sortedDocs)
+    const sortedDocs = await sortOnDistance(radius,location,documents as Activity[])
+   
     res.status(200).json(sortedDocs)
   }
   catch(error:any){

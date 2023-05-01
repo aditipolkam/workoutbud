@@ -28,7 +28,7 @@ const useGeoLocation = () => {
     });
   };
 
-  useEffect(() => {
+  const getCurrentLocation = () => {
     if (!("geolocation" in navigator)) {
       onError({
         code: 0,
@@ -37,9 +37,13 @@ const useGeoLocation = () => {
     }
 
     navigator.geolocation.getCurrentPosition(onSuccess, onError);
-  }, []);
+  };
 
-  return location;
+  // useEffect(() => {
+  //   getCurrentLocation();
+  // }, []);
+
+  return { location, getCurrentLocation };
 };
 
 export default useGeoLocation;

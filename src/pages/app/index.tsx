@@ -6,31 +6,37 @@ import { useContext } from "react";
 import { useRouter } from "next/router";
 import axios from "axios";
 import { Activity } from "@/types";
-
+import { getLatLng, geocodeByAddress } from "react-google-places-autocomplete";
+import GooglePlacesAutocomplete from "react-google-places-autocomplete";
 import { SimpleGrid, FormLabel } from "@chakra-ui/react";
 import ActivityCard from "@/components/ActivityCard";
 import CustomButton from "@/components/common/CustomButton";
 import Link from "next/link";
 import CustomSlider from "@/components/common/CustomSlider";
 
+type LocationCoordinates = {
+  lat: number | string;
+  lng: number | string;
+};
+
 const Index = () => {
   const router = useRouter();
-  const location = useGeoLocation();
+  const { location, getCurrentLocation } = useGeoLocation();
   const { user } = useContext(AuthContext);
   const [activities, setActivities] = React.useState<Activity[]>([]);
-
   const [sliderValue, setSliderValue] = React.useState(150);
+  const [coordinates, setCoordinates] =
+    React.useState<LocationCoordinates | null>(null);
 
   const getActivities = async () => {
     try {
-      console.log(sliderValue);
       const res = await axios.post(`/api/activities`, {
-        location,
+        location: coordinates,
         radius: sliderValue,
       });
       if (res.status == 400) return console.log(res.data);
       if (res.status !== 200) return console.log(res.data);
-      console.log(res);
+
       setActivities(res.data);
     } catch (err) {
       console.log(err);
@@ -41,25 +47,49 @@ const Index = () => {
     if (!user) {
       router.push("/");
     }
-    if (!location.loaded) return console.log("location not loaded");
-    if (location.coordinates) {
-      const { lat, lng } = location.coordinates;
-      if (lat && lng) getActivities();
-    }
-  }, [location.loaded, location.coordinates, user, router, sliderValue]);
+    if (!coordinates) return console.log("coordinates not set");
+    getActivities();
+  }, [coordinates, sliderValue, user]);
 
-  if (!location.loaded) return <>Loading location</>;
-  if (location.loaded && !location.coordinates)
-    return <>Location not found, please allow location permission</>;
+  const handlePlaceSelect = async (value: any) => {
+    let latLng: any = null;
+    const results = await geocodeByAddress(value.label);
+    if (results) latLng = await getLatLng(results[0]);
+    setCoordinates(latLng);
+  };
+
+  useEffect(() => {
+    if (!location.loaded) return console.log("location not loaded");
+    if (!location?.coordinates) return console.log("coordinates not loaded");
+    const { lat, lng } = location.coordinates;
+    if (!lat || !lng) return console.log("lat or lng not loaded");
+    setCoordinates({ lat, lng });
+  }, [location.coordinates, location.loaded]);
+
   return (
     <div className="mb-10">
       <div className="flex justify-between">
         <div>
-          <FormLabel>Search by current location: Distance (in kms)</FormLabel>
-          <CustomSlider
-            sliderValue={sliderValue}
-            setSliderValue={setSliderValue}
-          />
+          <div className="flex flex-row items-center">
+            <CustomButton variant="solid" handleClick={getCurrentLocation}>
+              Use Current Location
+            </CustomButton>
+            <div className="mr-2">or</div>
+            <GooglePlacesAutocomplete
+              apiKey={process.env.NEXT_PUBLIC_MAPS_API_KEY}
+              selectProps={{
+                onChange: handlePlaceSelect,
+                placeholder: "select location for search",
+              }}
+            />
+          </div>
+
+          <div className="my-5">
+            <CustomSlider
+              sliderValue={sliderValue}
+              setSliderValue={setSliderValue}
+            />
+          </div>
         </div>
         <Link href={"/signup/activities"}>
           <CustomButton variant="solid">Add Activity</CustomButton>
