@@ -33,9 +33,11 @@ export default function Home() {
         </p>
         <div className="flex mt-10">
           {/* <CustomButton variant="outline">Register</CustomButton> */}
-          <CustomButton variant="solid" handleClick={handleFindBuddy}>
-            Find Buddy
-          </CustomButton>
+          {user && (
+            <CustomButton variant="solid" handleClick={handleFindBuddy}>
+              Find Buddy
+            </CustomButton>
+          )}
         </div>
 
         {/* {location.loaded ? JSON.stringify(location) : "Loading..."} */}

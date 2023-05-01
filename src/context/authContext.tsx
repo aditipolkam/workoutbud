@@ -66,6 +66,13 @@ export const AuthContextProvider = ({ children }: { children: any }) => {
       else if (!res.data.gender) path = "/signup/gender";
       else if (!res.data.bio) path = "/signup/bio";
       else if (!res.data.activities) path = "/signup/activities";
+      else if (
+        res.data.name &&
+        res.data.gender &&
+        res.data.bio &&
+        res.data.activities
+      )
+        path = "/app";
       //check which page to redirect to
     } else {
       setRegisterStatus(false);
