@@ -1,48 +1,66 @@
 import { Activity } from "@/types";
 import React from "react";
-import {
-  Card,
-  CardHeader,
-  Heading,
-  CardBody,
-  Text,
-  CardFooter,
-  Button,
-  Center,
-  Flex,
-  Avatar,
-  Box,
-  IconButton,
-} from "@chakra-ui/react";
-import CustomButton from "./common/CustomButton";
+import { Card, CardBody, Text, Flex, Box, Button } from "@chakra-ui/react";
+import { useToast } from "@chakra-ui/react";
+import { BsSearchHeart, BsCalendar3 } from "react-icons/bs";
+import { FaShare, FaComment } from "react-icons/fa";
+import { GoLocation } from "react-icons/go";
+import { IoIosTimer } from "react-icons/io";
 
 const ActivityCard = ({ activity }: { activity: Activity }) => {
+  const toast = useToast();
+
   return (
     <Card maxW="md" dropShadow={"purple.100"}>
-      <CardHeader>
-        <Flex>
-          <Flex flex="1" gap="4" alignItems="center" flexWrap="wrap">
-            <Avatar src="https://bit.ly/broken-link" />
-            <Box>
-              <Text>{activity.name}</Text>
-            </Box>
-          </Flex>
-          <IconButton
-            variant="ghost"
-            colorScheme="gray"
-            aria-label="See menu"
-          />
-        </Flex>
-      </CardHeader>
       <CardBody>
+        <Flex alignItems={"center"} justifyContent={"space-between"}>
+          <Text fontSize="xl" color={"purple.700"} as="b">
+            {activity.name}
+          </Text>
+
+          <Button
+            onClick={() => {
+              toast({
+                title: "Activity Copied.",
+                description: "Copied the link to your clipboard.",
+                status: "success",
+                duration: 5000,
+                isClosable: true,
+              });
+            }}
+          >
+            <FaShare size={13} />
+          </Button>
+        </Flex>
         <Box>
-          <Text>{activity.description}</Text>
-          <Text>{activity.location.address}</Text>
-          <Box>On days {activity.days.join(" ")}</Box>
+          <div className="flex flex-row items-center my-2">
+            <div>
+              <BsSearchHeart size={15} />
+            </div>
+            <p className="mx-3">{activity.description}</p>
+          </div>
+          <div className="flex flex-row items-center my-2">
+            <div>
+              <GoLocation size={15} />
+            </div>
+            <p className="mx-3">{activity.location.address}</p>
+          </div>
+          <div className="flex flex-row items-center my-2">
+            <div>
+              <BsCalendar3 size={15} />
+            </div>
+            <p className="mx-3">{activity.days.join(" ")}</p>
+          </div>
+          <div className="flex flex-row items-center my-2">
+            <div>
+              <IoIosTimer size={15} />
+            </div>
+            <p className="mx-3">{activity.timeSlots.join(" ")}</p>
+          </div>
         </Box>
       </CardBody>
 
-      <CardFooter
+      {/* <CardFooter
         justify="space-between"
         flexWrap="wrap"
         sx={{
@@ -51,16 +69,16 @@ const ActivityCard = ({ activity }: { activity: Activity }) => {
           },
         }}
       >
-        <Button flex="1" variant="ghost">
-          Chat
-        </Button>
-        <Button flex="1" variant="ghost">
-          Comment
-        </Button>
-        <Button flex="1" variant="ghost">
-          Share
-        </Button>
-      </CardFooter>
+        <div className="flex grow justify-center">
+          <AiFillLike />
+        </div>
+        <div className="flex grow justify-center">
+          <FaComment />
+        </div>
+        <div className="flex grow justify-center">
+          <FaShare />
+        </div>
+      </CardFooter> */}
     </Card>
   );
 };
