@@ -23,6 +23,9 @@ const ActivityCard = ({ activity }: { activity: Activity }) => {
 
           <Button
             onClick={() => {
+              navigator.clipboard.writeText(
+                `http://workoutbud.vercel.app/app/${activity.id}`
+              );
               toast({
                 title: "Activity Copied.",
                 description: "Copied the link to your clipboard.",
