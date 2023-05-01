@@ -6,6 +6,7 @@ import { BsSearchHeart, BsCalendar3 } from "react-icons/bs";
 import { FaShare, FaComment } from "react-icons/fa";
 import { GoLocation } from "react-icons/go";
 import { IoIosTimer } from "react-icons/io";
+import Link from "next/link";
 
 const ActivityCard = ({ activity }: { activity: Activity }) => {
   const toast = useToast();
@@ -14,9 +15,11 @@ const ActivityCard = ({ activity }: { activity: Activity }) => {
     <Card maxW="md" dropShadow={"purple.100"}>
       <CardBody>
         <Flex alignItems={"center"} justifyContent={"space-between"}>
-          <Text fontSize="xl" color={"purple.700"} as="b">
-            {activity.name}
-          </Text>
+          <Link href={`/app/${activity.id}`}>
+            <Text fontSize="xl" color={"purple.700"} as="b">
+              {activity.name}
+            </Text>
+          </Link>
 
           <Button
             onClick={() => {

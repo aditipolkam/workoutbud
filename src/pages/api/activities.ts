@@ -43,6 +43,7 @@ function sortOnDistance(radius:any, location:any, mockData:Activity[]){
   }).then((res) => {
       // console.log("filtered")
       // console.dir(res, { depth: null, colors: true })
+
       return res;
       
   });
@@ -65,7 +66,12 @@ export default async function handler(req:NextApiRequest, res:NextApiResponse) {
     const snapshot = await db.collection(ACTIVITIES_COLLECTION).get()
     
     if(!snapshot) res.status(404).json({message:"Nothing found"})
-    const documents =  snapshot.docs.map(doc => doc.data());
+    const documents =  snapshot.docs.map(doc => {
+      return {
+        id: doc.id,
+        ...doc.data()
+      }
+    });
     if(documents.length == 0) res.status(404).json({message:"Nothing found"})
     const sortedDocs = await sortOnDistance(radius,location,documents as Activity[])
    
