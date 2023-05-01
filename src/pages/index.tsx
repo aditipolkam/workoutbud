@@ -26,9 +26,9 @@ export default function Home() {
   return (
     <main className="flex items-center justify-between py-24 w-full justify-between">
       <div>
-        <p className="text-5xl font-bold pr-16">
+        <p className="text-5xl font-bold pr-16 text-gray-600">
           let&apos;s find your{" "}
-          <span className="text-purple-400">fitness buddy</span> match in
+          <span className="text-purple-800">fitness buddy</span> match in
           seconds
         </p>
         <div className="flex mt-10">
