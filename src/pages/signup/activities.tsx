@@ -29,6 +29,7 @@ import { getLatLng, geocodeByAddress } from "react-google-places-autocomplete";
 const Activities = () => {
   const router = useRouter();
   const { user } = useContext(AuthContext);
+  const [value, setValue] = React.useState<any>(null);
   const [isPending, setIsPending] = React.useState<boolean>(false);
   const [activity, setActivity] = React.useState<Activity | null>({
     uid: user,
@@ -57,6 +58,7 @@ const Activities = () => {
   }, [user]);
 
   const handleSelect = async (value: any) => {
+    setValue(value);
     let latLng: any = null;
     const results = await geocodeByAddress(value.label);
     if (results) latLng = await getLatLng(results[0]);
@@ -160,6 +162,7 @@ const Activities = () => {
       }
       return prevActivities;
     });
+    setValue(null);
     setActivity({
       uid: user,
       name: "",
@@ -236,6 +239,7 @@ const Activities = () => {
               <GooglePlacesAutocomplete
                 apiKey={process.env.NEXT_PUBLIC_MAPS_API_KEY}
                 selectProps={{
+                  value,
                   onChange: handleSelect,
                   placeholder: "select location for this activity",
                 }}
